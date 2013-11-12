@@ -217,12 +217,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		while(iterator.hasNext())
 			iterator.next().draw(g);
 		
-		g.setColor(Color.red);
+		/*g.setColor(Color.red);
 		g.drawString(""+player.grounded, 100, 100);
 
 		g.drawString(""+ticks, 100, 110);
 		g.drawString(""+player.getX(), 100, 120);
-		g.drawString(""+player.getY(), 100, 130);
+		g.drawString(""+player.getY(), 100, 130);*/
 		
 		g.drawImage(trophy, 2200, 100, 100, 100, null);
 		
