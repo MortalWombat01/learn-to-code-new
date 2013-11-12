@@ -1,8 +1,7 @@
 package com.navinf.learntocode;
 import java.awt.*;
-
-import java.util.ArrayList;
-
+import java.awt.image.*;
+import java.awt.geom.AffineTransform;
 import java.util.*;
 
 public abstract class Enemy extends Character
@@ -27,13 +26,25 @@ public abstract class Enemy extends Character
 	
 	public void update(){
 		super.update();
+		if(getVX() < 0 && !flipped){
+			//AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+			//tx.translate(-image.getWidth(null), 0);
+			//AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			//image = op.filter(image, null);
+			//flipped = true;
+		}
 		if(restrict && (getX() < minX)){
 			face = Facing.RIGHT;
 			setX(minX);
+			flipped = false;
+			
 		}
 		if(restrict && (getX() > maxX)){
 			face = Facing.LEFT;
 			setX(maxX);
+			flipped = false;
+			
+			
 		}
 		if(ticker % 100 == 1){
 			movement();
@@ -58,7 +69,6 @@ public abstract class Enemy extends Character
 	}
 	
 	public void changeDirection(){
-		System.out.println("sdfsd");
 		if( face == Facing.LEFT )
 			face = Facing.RIGHT;
 		else

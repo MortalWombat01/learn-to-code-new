@@ -16,10 +16,14 @@ import javax.swing.*;
  
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener {
-	private static final int FPS = 1000 / 36;
+	private static final int FPS = 1000 / 60;
 	private static int WIDTH;
 	private static int HEIGHT;
-	private int ticks;
+	
+	
+	private int frame;
+	private long timebase;
+	private int currentfps;
 	
 	public static GamePanel me;
 	
@@ -166,8 +170,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         while(true){
             update();
             repaint();
-            ticks++;
-
+            
+            getFPS();
+            
+            frame++;
+            //timebase = System.currentTimeMillis();
+            
+            
             try {
                 tm += FPS;
                 Thread.sleep(Math.max(0, tm - System.currentTimeMillis()));
@@ -177,6 +186,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             	System.err.println(e);
             }
         }
+    }
+    
+    private void getFPS(){
+    	long time = System.currentTimeMillis();
+    	if(time - timebase > 1000){
+    		
+        	currentfps = (int) ( (long)frame*1000/(time - timebase) );
+        	timebase = time;
+        	frame = 0;
+        }
+        
     }
 	
     public void update(){
@@ -221,12 +241,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		while(iterator.hasNext())
 			iterator.next().draw(g);
 		
-		/*g.setColor(Color.red);
-		g.drawString(""+player.grounded, 100, 100);
-
-		g.drawString(""+ticks, 100, 110);
-		g.drawString(""+player.getX(), 100, 120);
-		g.drawString(""+player.getY(), 100, 130);*/
 		
 		g.drawImage(trophy, 2200, 100, 100, 100, null);
 		
@@ -239,6 +253,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		g.setColor(Color.RED);
 		g.fillRect(30, 30, player.getHealth(), 15);
 		
+		g.setColor(Color.WHITE);
+		int strw = g.getFontMetrics().stringWidth(currentfps+"");
+		int strh = g.getFontMetrics().getHeight();
+		g.fillRect(WIDTH - strw-22, 0, strw+2, strh);
+		g.setColor(Color.RED);
+		g.drawString(currentfps+"", WIDTH-strw-21, strh-3);
 		
 		
 		

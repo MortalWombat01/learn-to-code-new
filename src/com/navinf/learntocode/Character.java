@@ -1,13 +1,17 @@
 package com.navinf.learntocode;
 
 import java.awt.*;
+import java.awt.image.*;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 
 public abstract class Character extends Mobile
 {
-	private int health;
+	protected int health;
 	Player player;
+	protected BufferedImage image;
+	protected boolean flipped;
 	
 	public Character( int x, int y, int health, ArrayList<Element> elements )
 	{
@@ -24,7 +28,7 @@ public abstract class Character extends Mobile
 	
 	public void setHealth( int a )
 	{
-		health = a;
+		health = a >= 0 ? a : 0;
 	}
 	
 	public int getHealth()
