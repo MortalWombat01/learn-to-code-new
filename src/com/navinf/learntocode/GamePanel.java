@@ -17,6 +17,8 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private static final int FPS = 1000 / 36;
+	private static int WIDTH;
+	private static int HEIGHT;
 	private int ticks;
 	
 	public static GamePanel me;
@@ -43,16 +45,18 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		});
     	
     	parentWindow.getContentPane().add(me);
-    	//parentWindow.getContentPane().addKeyListener(me);
     	
-    	parentWindow.setSize(800 , 600);
+    	WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width/2;
+    	HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height/2;
+    	
+    	parentWindow.setSize(WIDTH , HEIGHT);
         parentWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        me.setPreferredSize(new Dimension(800, 450));
+        me.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         
         final LearnToCode ltc = new LearnToCode();
         codeBox = ltc.frame.getComponent(0);
-        codeBox.setPreferredSize(new Dimension(800, 150));
+        codeBox.setPreferredSize(new Dimension(WIDTH, 200));
         parentWindow.add(codeBox,BorderLayout.SOUTH);
         codeBox.setVisible(false);
         new Thread(){public void run(){
@@ -266,7 +270,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	    	if(player.distanceTo(talker1) < 100){
 	    		codeBox.setVisible(true);
 	    		parentWindow.pack();
-	    		parentWindow.setSize(800 , 600);
+	    		parentWindow.setSize(WIDTH, HEIGHT+200);
 	    		me.requestFocusInWindow();
 	    		elements.add(new Talker(-20, 150, 50, "Fill in the quotes: System.out.println(\" \");", elements));
 
@@ -282,7 +286,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	    	if(player.distanceTo(talker1) < 100){
 	    		codeBox.setVisible(true);
 	    		parentWindow.pack();
-	    		parentWindow.setSize(800 , 600);
+	    		parentWindow.setSize(WIDTH, HEIGHT+200);
 	    		codeBox.requestFocusInWindow();
 	    	}
 	    	
