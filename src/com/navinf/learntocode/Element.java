@@ -1,17 +1,24 @@
 package com.navinf.learntocode;
 import java.awt.*;
 import java.util.*;
+import physics.*;
 
 public abstract class Element{
-	private int x, y, width, height;
+	private int x, y;
+	
+	private Vec2 min;
+	private Vec2 max;
+	
 	
 	protected ArrayList<Element> elements;
 	
 	public Element(int x, int y, int width, int height, ArrayList<Element> elements){
+		
+		min = new Vec2(x, y);
+		max = new Vec2(x+width, y+height);
+		
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
 		
 		this.elements = elements;
 	}
@@ -94,11 +101,19 @@ public abstract class Element{
 	}
 	
 	public int getWidth() {
-		return width;
+		return max.getX()-min.getX();
 	}
 	
 	public int getHeight() {
-		return height;
+		return max.getY()-min.getY();
+	}
+	
+	public Vec2 getMin(){
+		return min;
+	}
+	
+	public Vec2 getMax(){
+		return max;
 	}
 	
 	abstract void draw(Graphics g);

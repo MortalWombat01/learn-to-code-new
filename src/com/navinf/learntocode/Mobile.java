@@ -1,6 +1,8 @@
 package com.navinf.learntocode;
 import java.util.ArrayList;
 
+import physics.*;
+
 
 public abstract class Mobile extends Element 
 {
@@ -112,7 +114,10 @@ public abstract class Mobile extends Element
 				array = this.isColliding(elements.get(j));
 				
 				while(array[1] || array[2] || array[3] || array[4]){
-					//System.out.println("bleh");
+					
+					System.out.println(Physics.colliding(new Manifold(this, elements.get(j))));
+					
+					
 					array = this.isColliding(elements.get(j));
 					if(array[1]){
 						//System.out.println("1");

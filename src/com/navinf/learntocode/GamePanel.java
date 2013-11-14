@@ -13,12 +13,17 @@ import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import physics.Physics;
+
  
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener {
-	private static final int FPS = 1000 / 60;
+	private static final int fps = 60;
+	private static final int dt = 1000 / fps;
 	private static int WIDTH;
 	private static int HEIGHT;
+	
+	private long accumulator;
 	
 	
 	private int frame;
@@ -166,19 +171,37 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public void run() {
     	// Remember the starting time
     	long tm = System.currentTimeMillis();
+    	
+    	long frameStart = tm;
 
         while(true){
             update();
-            repaint();
+            
             
             getFPS();
             
             frame++;
-            //timebase = System.currentTimeMillis();
             
+            
+            long currentTime = System.currentTimeMillis();
+            
+            accumulator += currentTime - frameStart;
+            
+            frameStart = currentTime;
+            
+            if(accumulator > 500){
+            	accumulator = 500;
+            }
+            
+            while(accumulator > dt){
+            	//update();
+            	accumulator -= dt;
+            }
+            
+            repaint();
             
             try {
-                tm += FPS;
+                tm += dt;
                 Thread.sleep(Math.max(0, tm - System.currentTimeMillis()));
             }
             catch(InterruptedException e)
@@ -257,8 +280,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		int strw = g.getFontMetrics().stringWidth(currentfps+"");
 		int strh = g.getFontMetrics().getHeight();
 		g.fillRect(WIDTH - strw-22, 0, strw+2, strh);
+		//g.fillRect(0, 0, 35, 15);
 		g.setColor(Color.RED);
 		g.drawString(currentfps+"", WIDTH-strw-21, strh-3);
+		//g.drawString(Physics.colliding(player, computer)+"", 3, 12);
 		
 		
 		
