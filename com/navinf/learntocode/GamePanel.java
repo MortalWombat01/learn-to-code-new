@@ -13,22 +13,11 @@ import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import physics.Physics;
-
  
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener {
-	private static final int fps = 60;
-	private static final int dt = 1000 / fps;
-	private static int WIDTH;
-	private static int HEIGHT;
-	
-	private long accumulator;
-	
-	
-	private int frame;
-	private long timebase;
-	private int currentfps;
+	private static final int FPS = 1000 / 36;
+	private int ticks;
 	
 	public static GamePanel me;
 	
@@ -54,18 +43,16 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		});
     	
     	parentWindow.getContentPane().add(me);
+    	//parentWindow.getContentPane().addKeyListener(me);
     	
-    	WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width/2;
-    	HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height/2;
-    	
-    	parentWindow.setSize(WIDTH , HEIGHT);
+    	parentWindow.setSize(800 , 600);
         parentWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        me.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        me.setPreferredSize(new Dimension(800, 450));
         
         final LearnToCode ltc = new LearnToCode();
         codeBox = ltc.frame.getComponent(0);
-        codeBox.setPreferredSize(new Dimension(WIDTH, 200));
+        codeBox.setPreferredSize(new Dimension(800, 150));
         parentWindow.add(codeBox,BorderLayout.SOUTH);
         codeBox.setVisible(false);
         new Thread(){public void run(){
@@ -171,37 +158,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public void run() {
     	// Remember the starting time
     	long tm = System.currentTimeMillis();
-    	
-    	long frameStart = tm;
 
         while(true){
             update();
-            
-            
-            getFPS();
-            
-            frame++;
-            
-            
-            long currentTime = System.currentTimeMillis();
-            
-            accumulator += currentTime - frameStart;
-            
-            frameStart = currentTime;
-            
-            if(accumulator > 500){
-            	accumulator = 500;
-            }
-            
-            while(accumulator > dt){
-            	//update();
-            	accumulator -= dt;
-            }
-            
             repaint();
-            
+            ticks++;
+
             try {
-                tm += dt;
+                tm += FPS;
                 Thread.sleep(Math.max(0, tm - System.currentTimeMillis()));
             }
             catch(InterruptedException e)
@@ -209,17 +173,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             	System.err.println(e);
             }
         }
-    }
-    
-    private void getFPS(){
-    	long time = System.currentTimeMillis();
-    	if(time - timebase > 1000){
-    		
-        	currentfps = (int) ( (long)frame*1000/(time - timebase) );
-        	timebase = time;
-        	frame = 0;
-        }
-        
     }
 	
     public void update(){
@@ -264,6 +217,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		while(iterator.hasNext())
 			iterator.next().draw(g);
 		
+		g.setColor(Color.red);
+		g.drawString(""+player.grounded, 100, 100);
+
+		g.drawString(""+ticks, 100, 110);
+		g.drawString(""+player.getX(), 100, 120);
+		g.drawString(""+player.getY(), 100, 130);
 		
 		g.drawImage(trophy, 2200, 100, 100, 100, null);
 		
@@ -276,14 +235,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		g.setColor(Color.RED);
 		g.fillRect(30, 30, player.getHealth(), 15);
 		
-		g.setColor(Color.WHITE);
-		int strw = g.getFontMetrics().stringWidth(currentfps+"");
-		int strh = g.getFontMetrics().getHeight();
-		g.fillRect(WIDTH - strw-22, 0, strw+2, strh);
-		//g.fillRect(0, 0, 35, 15);
-		g.setColor(Color.RED);
-		g.drawString(currentfps+"", WIDTH-strw-21, strh-3);
-		//g.drawString(Physics.colliding(player, computer)+"", 3, 12);
 		
 		
 		
@@ -315,7 +266,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	    	if(player.distanceTo(talker1) < 100){
 	    		codeBox.setVisible(true);
 	    		parentWindow.pack();
-	    		parentWindow.setSize(WIDTH, HEIGHT+200);
+	    		parentWindow.setSize(800 , 600);
 	    		me.requestFocusInWindow();
 	    		elements.add(new Talker(-20, 150, 50, "Fill in the quotes: System.out.println(\" \");", elements));
 
@@ -331,7 +282,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	    	if(player.distanceTo(talker1) < 100){
 	    		codeBox.setVisible(true);
 	    		parentWindow.pack();
-	    		parentWindow.setSize(WIDTH, HEIGHT+200);
+	    		parentWindow.setSize(800 , 600);
 	    		codeBox.requestFocusInWindow();
 	    	}
 	    	

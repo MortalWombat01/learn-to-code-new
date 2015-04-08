@@ -30,12 +30,6 @@ public class Player extends Character
 		}
 	}
 	
-	public void jump(){
-		if(!dead){
-			super.jump();
-		}
-	}
-	
 	public void movement()
 	{
 		

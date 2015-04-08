@@ -37,9 +37,6 @@ public class LearnToCode {
 	 * @throws InvocationTargetException 
 	 */
 	public static void main(String[] args) throws ClassNotFoundException, InterruptedException, InvocationTargetException {
-		
-		
-		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -53,15 +50,10 @@ public class LearnToCode {
 		});
 		while(LearnToCode.instance==null);
 		LearnToCode.instance.compileLoop();
-		
-		
 	}
 	
 	public void compileLoop() throws InterruptedException, ClassNotFoundException, InvocationTargetException{
 		JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
-		
-		
-		
 		SwingUtilities.invokeAndWait(new Runnable(){public void run(){
 		textArea.setText("public void main(){\n"+
 				  "\t\n"+
@@ -89,15 +81,11 @@ public class LearnToCode {
 						"-d", "bin" });
 				CompilationTask task = null;
 				try {
-						
 					task = jc.getTask(new PrintWriter("errors.log"), null,
 							null, compileOptions, null, java_files);
 				} catch (FileNotFoundException e1) {
 					System.out.println(e1);
-				} catch (NullPointerException e2 ){
-					System.err.println(e2);
 				}
-				
 				if (!task.call()) {
 					System.err.println("[compile failed]");
 					compiled=false;
@@ -106,9 +94,6 @@ public class LearnToCode {
 					compiled=true;
 					ran=false;
 				}
-				
-				
-				
 				status.setText(GamePanel.el.last);
 			}
 			if (compiled&&!ran){
